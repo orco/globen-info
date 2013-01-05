@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>GlobenInfo</title>
+</head>
+<body>
+
+<script type="text/javascript">
+	function setUserName(){
+		document.getElementById('boldStuff').innerHTML = "hjkf";
+        var userName = document.getElementById('ssusername');	
+		userName.value = 'name';
+        ob = document.forms['formen'];
+		ob.elements["ssusername"].value = 'muppen';
+	}
+</script>
+
+<script type="text/javascript">
+function changeText(){
+		var bs = document.getElementById('boldStuff');
+		bs.innerHTML = 'Fred Flinstone';
+		bs.innerHTML = document.getElementById('ssusername').value;
+	}
+</script>
+
+<form id="formen" action="#">
+  <input autocomplete="off" type="text" name="ssusername" id="ssusername" value="hej" size="20" maxlength="50"/>
+</form>
+
+<input type='button' onclick='setUserName()' value='Change Form Text'/>
+<p>Welcome to the site <b id='boldStuff'>dude</b> </p> 
+<input type='button' onclick='changeText()' value='Change Text'/>
+</body>
+</html>
