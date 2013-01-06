@@ -7,12 +7,15 @@
 <body>
 
 <script type="text/javascript">
-	function setUserName(){
-		document.getElementById('boldStuff').innerHTML = "hjkf";
-        var userName = document.getElementById('ssusername');	
-		userName.value = 'name';
-        ob = document.forms['formen'];
-		ob.elements["ssusername"].value = 'muppen';
+	function setUserName(name){
+//document.getElementById('ssusername').value = "hjkf";
+//var userName = document.getElementById('ssusername');	
+//		userName.value = 'name';
+		document.getElementsByName('ssusername')[0].value = name;
+//		ob = document.forms['login_formtable'];
+//		ob.elements["ssusername"].value = 'emrik.olsson';
+//		ob = document.forms['formen'];
+//		ob.elements["ssusername"].value = 'emrik.olsson';
 	}
 </script>
 
@@ -25,7 +28,7 @@ function changeText(){
 </script>
 
 <form id="formen" action="#">
-  <input autocomplete="off" type="text" name="ssusername" id="ssusername" value="hej" size="20" maxlength="50"/>
+  <input autocomplete="off" type="text" name="ssusername" value size="20" maxlength="50"/>
 </form>
 
 <input type='button' onclick='setUserName()' value='Change Form Text'/>
