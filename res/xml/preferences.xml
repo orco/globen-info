@@ -2,29 +2,29 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory
-            android:title="Security">
-
-        <CheckBoxPreference
-                android:key="savePassword"
-                android:title="Save Password"
-                android:summary="save_password_preference" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
             android:title="Configuration">
 
         <EditTextPreference
                 android:key="username"
                 android:title="User Name"
-                android:summary="username_preference"
-                android:dialogTitle="dialog_username_preference" />
+                android:summary="Användarnamn"
+                android:dialogTitle="Please enter your username for Schoolsoft" />
 
         <EditTextPreference
                 android:key="password"
                 android:title="Password"
-                android:summary="password_preference"
-                android:dialogTitle="dialog_password_preference" />
+                android:summary="Lösenord"
+                android:dialogTitle="Please enter your username for Schoolsoft" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:title="Security">
+
+        <CheckBoxPreference
+                android:key="savePassword"
+                android:title="Save Password"
+                android:summary="Vill du spara ditt lösenord i telefonen?" />
 
     </PreferenceCategory>
 

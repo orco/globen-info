@@ -2,16 +2,20 @@ package com.orco.android;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 public class GlobenInfo extends Activity {
     private WebView browser;
+    private String username;
+    private String password;
 
     /** Called when the activity is first created. */
     @SuppressLint("SetJavaScriptEnabled")
@@ -21,6 +25,7 @@ public class GlobenInfo extends Activity {
         setContentView(R.layout.main);
         browser=(WebView)findViewById(R.id.webkit);
         browser.getSettings().setJavaScriptEnabled(true);
+        loadPrefs();
 
         /* WebViewClient must be set BEFORE calling loadUrl! */  
         browser.setWebViewClient(new WebViewClient() {  
@@ -32,6 +37,20 @@ public class GlobenInfo extends Activity {
                     browser.loadUrl("javascript:(function() {document.getElementById('usertype').value = '2'; })()");
                     browser.loadUrl("javascript:(function() {document.getElementsByName('ssusername')[0].value = 'emrik.olsson'; })()");
                     browser.loadUrl("javascript:(function() {document.getElementsByName('sspassword')[0].value = 'kfth4yjis6'; })()");
+                    String jsUrlStart = "javascript:(function() {document.";
+                    String jsUrlEnd = "; })()";
+                    browser.loadUrl(jsUrlStart
+                            + "getElementById('usertype').value = '2'"
+                            + jsUrlEnd);
+                    browser.loadUrl(jsUrlStart
+                            + "getElementByName('ssusername')[0].value = '"
+                            + username + "'" + jsUrlEnd);
+                    browser.loadUrl(jsUrlStart
+                            + "getElementByName('sspassword')[0].value = '"
+                            + password + "'" + jsUrlEnd);
+                    // browser.loadUrl("javascript:(function() {document.getElementById('usertype').value = '2'; })()");
+                    // browser.loadUrl("javascript:(function() {document.getElementsByName('ssusername')[0].value = 'emrik.olsson'; })()");
+                    // browser.loadUrl("javascript:(function() {document.getElementsByName('sspassword')[0].value = 'kfth4yjis6'; })()");
                     // browser.loadUrl("javascript:(function() {document.forms['userForm'].submit(); })()");
                 }
                 catch(Exception ex)
@@ -55,8 +74,22 @@ public class GlobenInfo extends Activity {
        }
 
     @Override
+
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.options, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        /*
+         * Because it's only ONE option in the menu. In order to make it simple,
+         * We always start SetPreferenceActivity without checking.
+         */
+        Intent intent = new Intent();
+        intent.setClass(GlobenInfo.this, SetPreferenceActivity.class);
+        startActivityForResult(intent, 0);
+
         return true;
     }
 
@@ -69,10 +102,12 @@ public class GlobenInfo extends Activity {
     public void onPause() {
       super.onPause();
     }
-    
-    private void loadPref() {
+
+    private void loadPrefs() {
         SharedPreferences mySharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(this);
 
+        username = mySharedPreferences.getString("username", "UNKNOWN");
+        password = mySharedPreferences.getString("password", "UNKNOWN");
     }
 }
