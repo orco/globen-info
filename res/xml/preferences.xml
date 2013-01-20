@@ -2,19 +2,19 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory
-            android:title="Configuration">
+            android:title="Inställningar">
 
         <EditTextPreference
                 android:key="username"
-                android:title="User Name"
+                android:title="Användarnamn"
                 android:summary="Användarnamn"
-                android:dialogTitle="Please enter your username for Schoolsoft" />
+                android:dialogTitle="Ange ditt användarnamn" />
 
         <EditTextPreference
                 android:key="password"
-                android:title="Password"
+                android:title="Lösenord"
                 android:summary="Lösenord"
-                android:dialogTitle="Please enter your username for Schoolsoft" />
+                android:dialogTitle="Ange lösenord" />
 
     </PreferenceCategory>
 

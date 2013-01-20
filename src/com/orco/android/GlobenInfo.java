@@ -34,23 +34,17 @@ public class GlobenInfo extends Activity {
             {  
                 try
                 {     
-                    browser.loadUrl("javascript:(function() {document.getElementById('usertype').value = '2'; })()");
-                    browser.loadUrl("javascript:(function() {document.getElementsByName('ssusername')[0].value = 'emrik.olsson'; })()");
-                    browser.loadUrl("javascript:(function() {document.getElementsByName('sspassword')[0].value = 'kfth4yjis6'; })()");
                     String jsUrlStart = "javascript:(function() {document.";
                     String jsUrlEnd = "; })()";
                     browser.loadUrl(jsUrlStart
                             + "getElementById('usertype').value = '2'"
                             + jsUrlEnd);
                     browser.loadUrl(jsUrlStart
-                            + "getElementByName('ssusername')[0].value = '"
+                            + "getElementsByName('ssusername')[0].value = '"
                             + username + "'" + jsUrlEnd);
                     browser.loadUrl(jsUrlStart
-                            + "getElementByName('sspassword')[0].value = '"
+                            + "getElementsByName('sspassword')[0].value = '"
                             + password + "'" + jsUrlEnd);
-                    // browser.loadUrl("javascript:(function() {document.getElementById('usertype').value = '2'; })()");
-                    // browser.loadUrl("javascript:(function() {document.getElementsByName('ssusername')[0].value = 'emrik.olsson'; })()");
-                    // browser.loadUrl("javascript:(function() {document.getElementsByName('sspassword')[0].value = 'kfth4yjis6'; })()");
                     // browser.loadUrl("javascript:(function() {document.forms['userForm'].submit(); })()");
                 }
                 catch(Exception ex)
@@ -60,7 +54,10 @@ public class GlobenInfo extends Activity {
                 }
             }
         });  
-        
+        loadSchoolsoft();
+    }
+
+    private void loadSchoolsoft() {
         try
         {     
             //browser.loadUrl("file:///android_asset/globen.html");
@@ -71,10 +68,9 @@ public class GlobenInfo extends Activity {
             Log.e("Error : " , "Error in onCreate() " + ex.getMessage());
             ex.printStackTrace();
         }
-       }
+    }
 
     @Override
-
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.options, menu);
         return true;
@@ -86,21 +82,29 @@ public class GlobenInfo extends Activity {
          * Because it's only ONE option in the menu. In order to make it simple,
          * We always start SetPreferenceActivity without checking.
          */
+        startPrefActivity();
+        return true;
+    }
+
+    private void startPrefActivity() {
         Intent intent = new Intent();
         intent.setClass(GlobenInfo.this, SetPreferenceActivity.class);
         startActivityForResult(intent, 0);
-
-        return true;
     }
 
     @Override
     public void onResume() {
       super.onResume();
+        loadSchoolsoft();
     }
     
     @Override
     public void onPause() {
       super.onPause();
+    }
+
+    private boolean validConfig(String cfg) {
+        return (!(cfg.equals("UNKNOWN")) && !(cfg.equals("")));
     }
 
     private void loadPrefs() {
@@ -109,5 +113,10 @@ public class GlobenInfo extends Activity {
 
         username = mySharedPreferences.getString("username", "UNKNOWN");
         password = mySharedPreferences.getString("password", "UNKNOWN");
+        // Log.e("username = ", username);
+        // Log.e("password = ", password);
+        if (!validConfig(username) || !validConfig(password)) {
+            startPrefActivity();
+        }
     }
 }
