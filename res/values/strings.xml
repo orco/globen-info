@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Globen-info</string>
-    <string name="webkit">MyBrowser</string>
-    <string name="refresh">Refresh</string>
-    <string name="settings">Settings</string>
-    <string name="pref_activity_name">Preferences</string>
-    <string name="configure_name">Configure</string>
+    <string name="appName">GlobenInfo</string>
+    <string name="webkit">MinBrowser</string>
+    <string name="refresh">Uppdatera</string>
+    <string name="settings">Inställningar</string>
+    <string name="pref_activity_name">PreferenceActivity</string>
+    <string name="configure_name">Konfigurera</string>
+    <string name="usernameKey">username</string>
+    <string name="passwordKey">password</string>
 </resources>

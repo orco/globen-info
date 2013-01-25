@@ -5,13 +5,13 @@
             android:title="Inställningar">
 
         <EditTextPreference
-                android:key="username"
+                android:key="@string/usernameKey"
                 android:title="Användarnamn"
                 android:summary="Användarnamn"
                 android:dialogTitle="Ange ditt användarnamn" />
 
         <EditTextPreference
-                android:key="password"
+                android:key="@string/passwordKey"
                 android:title="Lösenord"
                 android:summary="Lösenord"
                 android:dialogTitle="Ange lösenord" />
@@ -19,13 +19,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="Security">
+            android:title="Säkerhet">
 
         <CheckBoxPreference
                 android:key="savePassword"
                 android:title="Save Password"
                 android:summary="Vill du spara ditt lösenord i telefonen?" />
 
+        <CheckBoxPreference
+                android:key="autoLogin"
+                android:title="Logga in automatiskt"
+                android:summary="Om din inloggning fungerar slå på detta" />
+        
     </PreferenceCategory>
 
 </PreferenceScreen>
