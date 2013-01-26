@@ -17,7 +17,7 @@ public class GlobenInfo extends Activity {
     private WebView browser;
     private String username;
     private String password;
-    private Boolean automaticallyLogin;
+    private Boolean automaticallyLogin = false;
     private final String SchoolSoftUrl = "https://sms11.schoolsoft.se/globen/jsp/pda/Login.jsp";
     private Integer loginAttemptsLeft = 1;
     private String lastUrl = "";
@@ -29,11 +29,13 @@ public class GlobenInfo extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         browser=(WebView)findViewById(R.id.webkit);
         browser.getSettings().setJavaScriptEnabled(true);
-        loadPrefs();
-        injectJavaScript();
-        loadSchoolsoft();
+        if (loadPrefs()) {
+            injectJavaScript();
+            loadSchoolsoft();
+        }
     }
 
 
@@ -52,11 +54,11 @@ public class GlobenInfo extends Activity {
                 if (!onLoginPage && !lastWasLogin) {
                     return;
                 }
-
                 if (loginSucceded) {
                     Toast.makeText(getApplicationContext(), "Inloggad!",
                             Toast.LENGTH_SHORT).show();
                     loginAttemptsLeft = 1;
+                    tryingToLogin = false;
                     return;
                 }
 
@@ -64,7 +66,11 @@ public class GlobenInfo extends Activity {
                     if (tryingToLogin) {
                         Toast.makeText(
                                 getApplicationContext(),
-                                "Misslyckades logga in, kontrollera användarnamn och lösenord!",
+                                "Misslyckades logga in med "
+                                        + username
+                                        + " "
+                                        + password
+                                        + ", kontrollera användarnamn och lösenord!",
                                 Toast.LENGTH_LONG).show();
                         tryingToLogin = false;
                         startPrefActivity();
@@ -82,6 +88,8 @@ public class GlobenInfo extends Activity {
                                     + "getElementsByName('sspassword')[0].value = '"
                                     + password + "'" + jsUrlEnd);
                             if (automaticallyLogin && (loginAttemptsLeft > 0)) {
+                                Log.i("subMitting attempts left",
+                                        loginAttemptsLeft.toString());
                                 tryingToLogin = true;
                                 loginAttemptsLeft--;
                                 browser.loadUrl(jsUrlStart
@@ -104,6 +112,7 @@ public class GlobenInfo extends Activity {
     private void loadSchoolsoft() {
         try
         {     
+            Log.i("Loading ", SchoolSoftUrl);
             browser.loadUrl(SchoolSoftUrl);
         }
         catch(Exception ex)
@@ -132,15 +141,22 @@ public class GlobenInfo extends Activity {
     private void startPrefActivity() {
         Intent intent = new Intent();
         intent.setClass(GlobenInfo.this, SetPreferenceActivity.class);
-        startActivityForResult(intent, 0);
+        startActivityForResult(intent, 42);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 42) {
+            if (loadPrefs()) {
+                injectJavaScript();
+                loadSchoolsoft();
+            }
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        loadPrefs();
-        injectJavaScript();
-        loadSchoolsoft();
     }
     
     @Override
@@ -152,17 +168,18 @@ public class GlobenInfo extends Activity {
         return !(cfg.equals("UNKNOWN") || cfg.equals(""));
     }
 
-    private void loadPrefs() {
+    private Boolean loadPrefs() {
         SharedPreferences sharedPrefs = PreferenceManager
                 .getDefaultSharedPreferences(this);
 
         String userPref = sharedPrefs.getString("username", "UNKNOWN");
         String passPref = sharedPrefs.getString("password", "UNKNOWN");
-        if (!(validConfig(userPref) && validConfig(passPref))) {
-            startPrefActivity();
-            return;
-        }
         automaticallyLogin = sharedPrefs.getBoolean("autoLogin", false);
+        if (!(validConfig(userPref) && validConfig(passPref))) {
+            Log.e("Invalid username or password: ", userPref + " " + passPref);
+            startPrefActivity();
+            return false;
+        }
         if (!userPref.equals(username) || !passPref.equals(password)) {
             if (automaticallyLogin) {
                 loginAttemptsLeft = 1;
@@ -170,5 +187,6 @@ public class GlobenInfo extends Activity {
         }
         username = userPref;
         password = passPref;
+        return true;
     }
 }

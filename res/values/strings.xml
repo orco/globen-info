@@ -9,4 +9,5 @@
     <string name="configure_name">Konfigurera</string>
     <string name="usernameKey">username</string>
     <string name="passwordKey">password</string>
+    <string name="NA">Ej angivet</string>
 </resources>

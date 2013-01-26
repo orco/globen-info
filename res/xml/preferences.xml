@@ -8,23 +8,15 @@
                 android:key="@string/usernameKey"
                 android:title="Användarnamn"
                 android:summary="Användarnamn"
+                android:defaultValue="@string/NA"
                 android:dialogTitle="Ange ditt användarnamn" />
 
         <EditTextPreference
                 android:key="@string/passwordKey"
                 android:title="Lösenord"
                 android:summary="Lösenord"
+                android:defaultValue="@string/NA"
                 android:dialogTitle="Ange lösenord" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-            android:title="Säkerhet">
-
-        <CheckBoxPreference
-                android:key="savePassword"
-                android:title="Save Password"
-                android:summary="Vill du spara ditt lösenord i telefonen?" />
 
         <CheckBoxPreference
                 android:key="autoLogin"

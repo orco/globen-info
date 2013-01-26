@@ -15,6 +15,13 @@ public class PrefsFragment extends PreferenceFragment {
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
+
+        this.findPreference("username").setSummary(
+                this.getPreferenceManager().getSharedPreferences()
+                        .getString("username", "UNKNOWN"));
+        this.findPreference("password").setSummary(
+                this.getPreferenceManager().getSharedPreferences()
+                        .getString("password", "UNKNOWN"));
     }
 
 }

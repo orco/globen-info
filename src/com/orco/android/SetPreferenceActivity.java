@@ -20,24 +20,6 @@ public class SetPreferenceActivity extends PreferenceActivity {
                 .replace(android.R.id.content, fragment).commit();
         PreferenceManager.getDefaultSharedPreferences(this)
                 .registerOnSharedPreferenceChangeListener(listener);
-
-        /*
-         * String str = PreferenceManager.getDefaultSharedPreferences(this)
-         * .getString("username", "HOPPLA"); ((EditTextPreference)
-         * fragment.findPreference("username")) .setSummary(str);
-         */
-
-        /*
-         * EditTextPreference username = (EditTextPreference) fragment
-         * .findPreference("username"); EditTextPreference password =
-         * (EditTextPreference) fragment .findPreference("password");
-         * username.setSummary
-         * (PreferenceManager.getDefaultSharedPreferences(this)
-         * .getString("username", "UNKNOWN"));
-         * password.setSummary(PreferenceManager
-         * .getDefaultSharedPreferences(this) .getString("password",
-         * "UNKNOWN"));
-         */
     }
 
     // Use instance field for listener
