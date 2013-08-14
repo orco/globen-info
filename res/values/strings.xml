@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Globen-info</string>
+    <string name="app_name">Globen-Info</string>
     <string name="appName">GlobenInfo</string>
+    <string name="viewerName">GlobenViewer</string>
     <string name="webkit">MinBrowser</string>
     <string name="refresh">Uppdatera</string>
     <string name="settings">Inställningar</string>
