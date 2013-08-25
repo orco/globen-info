@@ -2,13 +2,17 @@ package com.orco.android;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.DownloadListener;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
@@ -34,7 +38,36 @@ public class GlobenInfo extends Activity {
         browser.getSettings().setJavaScriptEnabled(true);
         if (loadPrefs()) {
             injectJavaScript();
-            loadSchoolsoft();
+            loadSchoolsoft(SchoolSoftUrl);
+            browser.setDownloadListener(new DownloadListener()
+            {
+                public void onDownloadStart(String url,      String userAgent, String contentDisposition,
+                                            String mimeType, long   contentLength)
+                {
+                    Toast.makeText(getApplicationContext(), "Laddar ner: " + url,
+                            Toast.LENGTH_SHORT).show();
+                    //loadSchoolsoft(url);
+
+                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+                    DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+                    manager.enqueue(request);
+
+//                    Intent intent = new Intent(Intent.ACTION_VIEW);
+//                    intent.setDataAndType(Uri.parse(url), mimeType);
+//                    startActivity(intent);
+
+//                    Uri uri = Uri.parse(url);
+//                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//                    startActivity(intent);
+                    //injectJavaScript();
+                    //browser.()
+                    //browser.loadUrl("http://docs.google.com/gview?embedded=true&url="
+                    //        + url);
+                    //Intent intent = new Intent(Intent. ACTION_VIEW);
+                    //intent.setData(Uri.parse(url));
+                    //startActivity(intent);
+                }
+            });
         }
     }
 
@@ -70,7 +103,7 @@ public class GlobenInfo extends Activity {
                                         + username
                                         + " "
                                         + password
-                                        + ", kontrollera användarnamn och lösenord!",
+                                        + ", kontrollera anvï¿½ndarnamn och lï¿½senord!",
                                 Toast.LENGTH_LONG).show();
                         tryingToLogin = false;
                         startPrefActivity();
@@ -109,11 +142,11 @@ public class GlobenInfo extends Activity {
 
     }
 
-    private void loadSchoolsoft() {
+    private void loadSchoolsoft(String url) {
         try
         {     
-            Log.i("Loading ", SchoolSoftUrl);
-            browser.loadUrl(SchoolSoftUrl);
+            Log.i("Loading ", url);
+            browser.loadUrl(url);
         }
         catch(Exception ex)
         {
@@ -149,7 +182,7 @@ public class GlobenInfo extends Activity {
         if (requestCode == 42) {
             if (loadPrefs()) {
                 injectJavaScript();
-                loadSchoolsoft();
+                loadSchoolsoft(SchoolSoftUrl);
             }
         }
     }
