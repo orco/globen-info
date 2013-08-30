@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -36,6 +37,7 @@ public class GlobenInfo extends Activity {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         browser=(WebView)findViewById(R.id.webkit);
         browser.getSettings().setJavaScriptEnabled(true);
+        CookieManager.getInstance().setAcceptCookie(true);
         if (loadPrefs()) {
             injectJavaScript();
             loadSchoolsoft(SchoolSoftUrl);
@@ -46,31 +48,39 @@ public class GlobenInfo extends Activity {
                 {
                     Toast.makeText(getApplicationContext(), "Laddar ner: " + url,
                             Toast.LENGTH_SHORT).show();
-                    //loadSchoolsoft(url);
 
                     DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
                     DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+
+                    CookieManager mgr = CookieManager.getInstance();
+                    Log.i( "URL", url );
+                    Log.i("Cookie",mgr.getCookie("sms11.schoolsoft.se"));
+                    String cookie_string = mgr.getCookie(SchoolSoftUrl);
+                    String sessionid = "";
+                    for(String cookie: cookie_string.split(";")) {
+                        if(cookie.split("=")[0].equals(" JSESSIONID")) {
+                            sessionid = cookie.split("=")[1];
+                        }
+                    }
+                    String title = "";
+                    for(String s: contentDisposition.split(";")) {
+                        if(s.split("=")[0].equals(" filename")) {
+                            title = s.split("=")[1];
+                        }
+                    }
+
+                    request.setDescription(title.replaceAll("\\s", "").replaceAll("[^\\x00-\\x7F]", ""));
+                    request.setMimeType(mimeType);
+                    request.setTitle("Nerladdning");
+                    request.addRequestHeader("Cookie", "JSESSIONID=" + sessionid);
+                    request.allowScanningByMediaScanner();
+                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
                     manager.enqueue(request);
-
-//                    Intent intent = new Intent(Intent.ACTION_VIEW);
-//                    intent.setDataAndType(Uri.parse(url), mimeType);
-//                    startActivity(intent);
-
-//                    Uri uri = Uri.parse(url);
-//                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//                    startActivity(intent);
-                    //injectJavaScript();
-                    //browser.()
-                    //browser.loadUrl("http://docs.google.com/gview?embedded=true&url="
-                    //        + url);
-                    //Intent intent = new Intent(Intent. ACTION_VIEW);
-                    //intent.setData(Uri.parse(url));
-                    //startActivity(intent);
                 }
             });
         }
     }
-
 
     private void injectJavaScript() {
         /* WebViewClient must be set BEFORE calling loadUrl! */  
